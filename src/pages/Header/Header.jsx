@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import ModalComponent from '../../components/modal/Modal';
 import Auth from '../auth/Auth';
+import Search from '../search/Search';
 
 const Header = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
-    function openModal() {
+    const openModal = () => {
         setIsOpen(true);
-    }
+    };
 
-    function closeModal() {
+    const closeModal = () => {
         setIsOpen(false);
-    }
+    };
 
     return (
         <div className='bg-white sticky z-50 top-0'>
@@ -23,37 +24,7 @@ const Header = () => {
                     />
                 </div>
                 <div className='max-w-md flex-1 text-secondary'>
-                    <div className='relative'>
-                        <div className='absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none'>
-                            <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                fill='none'
-                                viewBox='0 0 24 24'
-                                strokeWidth={1.5}
-                                stroke='currentColor'
-                                className='size-6'
-                            >
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
-                                />
-                            </svg>
-                        </div>
-                        <input
-                            type='search'
-                            id='default-search'
-                            className='block w-full py-4 px-8 ps-10 text-sm border border-secondary rounded-lg outline-none '
-                            placeholder='Search Mockups, Logos...'
-                            required
-                        />
-                        <button
-                            type='submit'
-                            className='text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2'
-                        >
-                            Search
-                        </button>
-                    </div>
+                    <Search />
                 </div>
                 <div className='flex gap-8 items-center'>
                     <div className='flex items-center gap-2 text-secondary cursor-pointer'>

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import productService from '../../../services/productService';
-import typeProductService from '../../../services/typeProductService';
-import { Link, useNavigate } from 'react-router';
 import ModalComponent from '../../../components/modal/Modal';
 import ModalDelete from '../modalDelete/ModalDelete';
 
-const Product = () => {
-    const products = useSelector((state) => state.product.allProduct?.data?.products);
-    const countProductDeleted = useSelector((state) => state.product.allProduct?.data?.countProductDeleted);
+const ListProductDeleted = () => {
+    const products = useSelector((state) => state.product.productDeleted?.data);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -20,19 +18,24 @@ const Product = () => {
     const closeModal = () => {
         setIsOpen(false);
     };
-    const handleDelete = (id) => {
-        productService.deleteProduct(id);
+
+    const handleRestoreProduct = (id) => {
+        productService.restoreProduct(id);
+        navigate(0);
+    };
+
+    const handleForceDeleteProduct = (id) => {
+        productService.forceDeleteProduct(id);
         navigate(0);
     };
     useEffect(() => {
-        productService.getAllProduct(dispatch);
-        typeProductService.getAllTypeProduct(dispatch);
+        productService.getProductDeleted(dispatch);
     }, []);
     return (
         <div className='relative overflow-x-auto'>
-            <h1 className='text-center font-bold mb-8'>DANH SÁCH SẢN PHẨM</h1>
+            <h1 className='text-center font-bold mb-8'>SẢN PHẨM ĐÃ XÓA</h1>
             <div className='mb-8 flex items-center justify-between'>
-                <Link to='/admin/product/create' className='flex items-center gap-2'>
+                <Link to='/admin' className='flex items-center gap-2'>
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
@@ -44,29 +47,11 @@ const Product = () => {
                         <path
                             strokeLinecap='round'
                             strokeLinejoin='round'
-                            d='M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z'
+                            d='M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3'
                         />
                     </svg>
 
-                    <p className='text-sm'>Thêm Sản Phẩm</p>
-                </Link>
-                <Link to='/admin/product/deleted' className='flex items-center gap-2'>
-                    <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        strokeWidth={1.5}
-                        stroke='currentColor'
-                        className='size-4'
-                    >
-                        <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            d='m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0'
-                        />
-                    </svg>
-
-                    <p className='text-sm'>Sản Phẩm Đã Xóa ({countProductDeleted})</p>
+                    <p className='text-sm'>Quay Lại</p>
                 </Link>
             </div>
             <table className='w-full text-sm text-left rtl:text-right text-gray-500'>
@@ -105,19 +90,21 @@ const Product = () => {
                             <td className='px-6 py-4 whitespace-nowrap'>{product.name}</td>
                             <td className='px-6 py-4 whitespace-nowrap'>{product.price} VND</td>
                             <td className='px-6 py-4 whitespace-nowrap'>{product.description} </td>
-                            <td className='px-6 py-4 whitespace-nowrap'>{product.type.name}</td>
+                            <td className='px-6 py-4 whitespace-nowrap'>{product.type}</td>
                             <td className='px-6 py-4 whitespace-nowrap'>{product.rating} Sao</td>
                             <td className='px-6 py-4'>{product.image}</td>
                             <td className='px-6 py-4'>{new Date(product.createdAt).toLocaleDateString('vie-VN')}</td>
                             <td className='px-6 py-4'>
-                                <Link to={`/admin/product/${product._id}`} className='text-primary font-bold'>
-                                    Sửa
-                                </Link>
+                                <button
+                                    onClick={() => handleRestoreProduct(product._id)}
+                                    className='text-primary font-bold'
+                                >
+                                    Khôi Phục
+                                </button>
                             </td>
                             <td className='px-6 py-4'>
                                 <button
-                                    onClick={(e) => {
-                                        e.preventDefault();
+                                    onClick={() => {
                                         openModal();
                                         setIdProduct(product._id);
                                     }}
@@ -136,7 +123,7 @@ const Product = () => {
                 <ModalDelete
                     closeModal={closeModal}
                     onDelete={() => {
-                        handleDelete(idProduct);
+                        handleForceDeleteProduct(idProduct);
                     }}
                 />
             </ModalComponent>
@@ -145,4 +132,4 @@ const Product = () => {
     );
 };
 
-export default Product;
+export default ListProductDeleted;

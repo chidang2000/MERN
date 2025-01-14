@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
+    const [query, setQuery] = useState('');
+
     return (
-        <div className='bg-white p-4 mx-4 rounded-xl '>
-            <a href='/' className=' flex items-center justify-end gap-4'>
+        <div className='bg-white p-4 mx-4 rounded-xl flex items-center justify-between '>
+            <div className='flex items-center w-full max-w-md'>
+                <input
+                    type='text'
+                    className='flex-grow px-4 py-2 border border-gray-300 rounded-l-lg outline-none  '
+                    placeholder='Search...'
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+                <button className='bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition duration-200'>
+                    Search
+                </button>
+            </div>
+
+            <a href='/admin' className=' flex items-center justify-end gap-4'>
                 <h3>Chi Dang</h3>
                 <div className='w-10 h-10 '>
                     <img

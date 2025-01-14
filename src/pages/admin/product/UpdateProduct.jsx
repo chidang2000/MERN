@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import productService from '../../../services/productService';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 const UpdateProduct = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
     const navigate = useNavigate();
-    // const product = useSelector((state) => state.product.aProduct?.data);
+    const typesProduct = useSelector((state) => state.typeProduct?.allTypeProduct?.data);
     const [product, setProduct] = useState({});
-    const [name, setName] = useState('');
-    const [price, setPrice] = useState('');
-    const [desc, setDesc] = useState('');
-    const [type, setType] = useState('');
+    const [name, setName] = useState();
+    const [price, setPrice] = useState();
+    const [desc, setDesc] = useState();
+    const [type, setType] = useState();
     const handleUpdateProduct = () => {
         const newProduct = {
             name,
-            price,
+            price: Number(price),
             desc,
             type,
         };
-        productService.updateProduct(dispatch, id, newProduct);
+        productService.updateProduct(id, newProduct);
         navigate('/admin');
-        navigate(0);
     };
     useEffect(() => {
         const fetchApi = async () => {
@@ -78,14 +77,18 @@ const UpdateProduct = () => {
                 <label htmlFor='type' className='block mb-2 text-sm font-medium'>
                     Loại Sản Phẩm
                 </label>
-                <input
-                    defaultValue={product?.type}
-                    type='text'
+                <select
                     id='type'
-                    className='bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
-                    // value={type}
                     onChange={(e) => setType(e.target.value)}
-                />
+                    className='bg-gray-50 border border-gray-300 px-4  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                >
+                    <option value={product?.type?._id}>{product?.type?.name}</option>
+                    {typesProduct?.map((type) => (
+                        <option key={type._id} value={type._id}>
+                            {type.name}
+                        </option>
+                    ))}
+                </select>
             </div>
             <button
                 onClick={handleUpdateProduct}

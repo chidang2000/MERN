@@ -21,7 +21,7 @@ function App() {
                         const Page = route.component;
                         return (
                             <Route
-                                key={uuid}
+                                key={uuid()}
                                 path={route.path}
                                 element={
                                     <Layout>

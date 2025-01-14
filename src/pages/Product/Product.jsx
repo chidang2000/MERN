@@ -2,12 +2,14 @@ import React, { useEffect } from 'react';
 import ProductItem from './ProductItem';
 import { useDispatch, useSelector } from 'react-redux';
 import productService from '../../services/productService';
+import typeProductService from '../../services/typeProductService';
 
 const Product = () => {
     const dispatch = useDispatch();
-    const products = useSelector((state) => state.product.data);
+    const products = useSelector((state) => state.product.allProduct.data?.products);
     useEffect(() => {
         productService.getAllProduct(dispatch);
+        // typeProductService.getAllTypeProduct(dispatch);
     }, []);
     return (
         <div className='mt-8 bg-white p-8'>

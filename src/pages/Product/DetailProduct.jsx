@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import ProductItem from './ProductItem';
+import ModalComponent from '../../components/modal/Modal';
+import Adress from '../../components/adress/Adress';
 
 const DetailProduct = () => {
     const [quantity, setQuantity] = useState(1);
+    const [modalIsOpen, setIsOpen] = useState(false);
+    const openModal = () => {
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
+    };
 
     return (
         <div className='container mx-auto p-8 grid grid-cols-4 gap-4 mt-8 '>
@@ -125,8 +135,14 @@ const DetailProduct = () => {
                     <h3 className='font-bold text-sm'>Thong Tin Van Chuyen</h3>
                     <div className='flex items-center justify-between'>
                         <h3 className='text-sm'>Giao đến Q. 1, P. Bến Nghé, Hồ Chí Minh</h3>
-                        <button className='text-blue-500'>Doi</button>
+
+                        <button className='text-blue-500' onClick={openModal}>
+                            Doi
+                        </button>
                     </div>
+                    <ModalComponent modalIsOpen={modalIsOpen} closeModal={closeModal}>
+                        <Adress />
+                    </ModalComponent>
                 </div>
 
                 <div className='flex flex-col gap-4 rounded-xl bg-white p-4 mb-8'>

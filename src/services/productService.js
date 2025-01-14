@@ -1,13 +1,12 @@
 import httpRequest from '../untils/httpRequest.js';
 import {
-    createProductSuccess,
     getAProductFailed,
     getAProductStart,
     getAProductSuccess,
+    getProductDeletedSuccess,
     productFailed,
     productStart,
     productSuccess,
-    updateAProductSuccess,
 } from '../redux/productSlice.js';
 
 const productService = {
@@ -32,23 +31,54 @@ const productService = {
         }
     },
 
-    createProduct: async (dispatch, newProduct) => {
+    getProductDeleted: async (dispatch) => {
         dispatch(productStart());
         try {
-            await httpRequest.post('product/create', newProduct);
-            dispatch(createProductSuccess());
+            const res = await httpRequest.get('product/deleted');
+            dispatch(getProductDeletedSuccess(res.data));
+            return res.data;
         } catch (err) {
             dispatch(productFailed(err));
         }
     },
 
-    updateProduct: async (dispatch, id, newproduct) => {
-        dispatch(productStart());
+    createProduct: async (newProduct) => {
+        try {
+            await httpRequest.post('product/create', newProduct);
+        } catch (err) {
+            console.log(err);
+        }
+    },
+
+    updateProduct: async (id, newproduct) => {
         try {
             await httpRequest.put(`product/${id}/update`, newproduct);
-            dispatch(updateAProductSuccess());
         } catch (err) {
-            dispatch(productFailed(err));
+            console.log(err);
+        }
+    },
+
+    deleteProduct: async (id) => {
+        try {
+            await httpRequest.delete(`product/${id}/delete`);
+        } catch (err) {
+            console.log(err);
+        }
+    },
+
+    forceDeleteProduct: async (id) => {
+        try {
+            await httpRequest.delete(`product/${id}/forcedelete`);
+        } catch (err) {
+            console.log(err);
+        }
+    },
+
+    restoreProduct: async (id) => {
+        try {
+            await httpRequest.patch(`product/${id}/restore`);
+        } catch (err) {
+            console.log(err);
         }
     },
 };
