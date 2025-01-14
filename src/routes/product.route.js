@@ -3,9 +3,12 @@ import ProductController from '../app/controllers/ProductController.js';
 
 const router = express.Router();
 
-// router.get('/admin/product/:id', ProductController.getAProduct);
+router.patch('/:id/restore', ProductController.restoreProduct);
+router.delete('/:id/forcedelete', ProductController.forceDeleteProduct);
+router.delete('/:id/delete', ProductController.deleteProduct);
 router.put('/:id/update', ProductController.updateProduct);
 router.post('/create', ProductController.createProduct);
+router.get('/deleted', ProductController.getProductDeleted);
 router.get('/:id', ProductController.getAProduct);
 router.get('/', ProductController.getAllProduct);
 
